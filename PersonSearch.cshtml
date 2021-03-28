@@ -1,0 +1,49 @@
+﻿@model Program_3_Website_Storage.Models.ViewModel
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+
+        @using (Html.BeginForm("handleLoad", "People"))
+        {
+            <input id="loadButton" type="submit" value="Load Data" />
+        }
+        @using (Html.BeginForm("handleClear", "People"))
+        {
+            <input id="clearButton" type="submit" value="Clear Data" />
+        }
+        @using (Html.BeginForm("handleQuery", "People"))
+        {
+            @Html.TextBoxFor(x => x.person.PartitionKey, new { placeholder = "First Name", @class = "form-input" })
+            @Html.TextBoxFor(x => x.person.RowKey, new { placeholder = "Last Name", @class = "form-input" })
+            <input id="queryButton" type="submit" value="Query" />
+        }
+        @try
+        {
+            <p>@Model.message</p>
+            if (Model.people != null && Model.people.Count == 0)
+            {<p>No Results</p> }
+
+            else
+            {
+                foreach (var person in Model.people)
+                {
+                    <p>@(person.RowKey + " " + person.PartitionKey + " " + string.Join(",", person.attributes.Select(kv => kv.Key + "=" + kv.Value).ToArray()))</p>
+                }
+            }
+        }
+        catch (Exception e) { }
+
+
+    </div>
+</body>
+</html>
+
+
